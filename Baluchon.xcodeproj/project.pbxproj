@@ -16,6 +16,9 @@
 		86E7EF11273588BF00596736 /* BaluchonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E7EF10273588BF00596736 /* BaluchonTests.swift */; };
 		86E7EF1B273588BF00596736 /* BaluchonUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E7EF1A273588BF00596736 /* BaluchonUITests.swift */; };
 		86E7EF1D273588BF00596736 /* BaluchonUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E7EF1C273588BF00596736 /* BaluchonUITestsLaunchTests.swift */; };
+		86E7EF2E27359BF400596736 /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E7EF2D27359BF400596736 /* WeatherViewController.swift */; };
+		86E7EF3027359C0400596736 /* TranslateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E7EF2F27359C0400596736 /* TranslateViewController.swift */; };
+		86E7EF3227359C4600596736 /* CurrencyExchangeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E7EF3127359C4600596736 /* CurrencyExchangeViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +52,9 @@
 		86E7EF16273588BF00596736 /* BaluchonUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BaluchonUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		86E7EF1A273588BF00596736 /* BaluchonUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaluchonUITests.swift; sourceTree = "<group>"; };
 		86E7EF1C273588BF00596736 /* BaluchonUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaluchonUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		86E7EF2D27359BF400596736 /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
+		86E7EF2F27359C0400596736 /* TranslateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateViewController.swift; sourceTree = "<group>"; };
+		86E7EF3127359C4600596736 /* CurrencyExchangeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyExchangeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +144,9 @@
 			isa = PBXGroup;
 			children = (
 				86E7EEFD273588BB00596736 /* ViewController.swift */,
+				86E7EF2D27359BF400596736 /* WeatherViewController.swift */,
+				86E7EF2F27359C0400596736 /* TranslateViewController.swift */,
+				86E7EF3127359C4600596736 /* CurrencyExchangeViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -291,7 +300,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				86E7EEFE273588BB00596736 /* ViewController.swift in Sources */,
+				86E7EF3027359C0400596736 /* TranslateViewController.swift in Sources */,
+				86E7EF2E27359BF400596736 /* WeatherViewController.swift in Sources */,
 				86E7EEFA273588BB00596736 /* AppDelegate.swift in Sources */,
+				86E7EF3227359C4600596736 /* CurrencyExchangeViewController.swift in Sources */,
 				86E7EEFC273588BB00596736 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
