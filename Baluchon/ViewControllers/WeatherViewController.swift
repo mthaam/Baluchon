@@ -8,11 +8,23 @@
 import UIKit
 
 class WeatherViewController: UIViewController {
-
+    
+    @IBOutlet weak var detailsView: UIView!
+    @IBOutlet weak var currentConditionsView: UIView!
+    @IBOutlet weak var currentConditionsBottomView: UIView!
+    @IBOutlet weak var detailsBottomView: UIView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        makeRoundCornersToViews()
+    }
 
-        // Do any additional setup after loading the view.
+    private func makeRoundCornersToViews() {
+        detailsView.layer.cornerRadius = 10
+        currentConditionsView.layer.cornerRadius = 10
+        detailsBottomView.layer.cornerRadius = 10
+        currentConditionsBottomView.layer.cornerRadius = 10
     }
     
 
