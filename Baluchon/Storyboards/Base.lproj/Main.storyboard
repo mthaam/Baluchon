@@ -91,17 +91,17 @@
                                                             <constraint firstAttribute="width" constant="56" id="gjy-IW-0Kl"/>
                                                         </constraints>
                                                     </imageView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Ol3-NK-Fjb" userLabel="Main+FeelsLike Stack View">
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="Ol3-NK-Fjb" userLabel="Main+FeelsLike Stack View">
                                                         <rect key="frame" x="59" y="0.0" width="193" height="70.5"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="11.52 °C" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c0c-Q6-P4b">
-                                                                <rect key="frame" x="0.0" y="0.0" width="193" height="56"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="193" height="52"/>
                                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="35"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Feels like 9.82 °C" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PnG-zC-NFO">
-                                                                <rect key="frame" x="0.0" y="56" width="193" height="14.5"/>
+                                                                <rect key="frame" x="0.0" y="52" width="193" height="18.5"/>
                                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="12"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
@@ -297,17 +297,17 @@
                                                             <constraint firstAttribute="width" constant="56" id="01w-jd-IoS"/>
                                                         </constraints>
                                                     </imageView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="PKm-We-AhN" userLabel="Main+FeelsLike Stack View">
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="PKm-We-AhN" userLabel="Main+FeelsLike Stack View">
                                                         <rect key="frame" x="59" y="0.0" width="193" height="70.5"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="11.52 °C" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="21e-Ga-nKA">
-                                                                <rect key="frame" x="0.0" y="0.0" width="193" height="56"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="193" height="52"/>
                                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="35"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Feels like 9.82 °C" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6jW-RP-550">
-                                                                <rect key="frame" x="0.0" y="56" width="193" height="14.5"/>
+                                                                <rect key="frame" x="0.0" y="52" width="193" height="18.5"/>
                                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="12"/>
                                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <nil key="highlightedColor"/>
@@ -469,6 +469,15 @@
                         <outlet property="currentConditionsView" destination="SZT-Jf-xQf" id="ybl-EK-2JO"/>
                         <outlet property="detailsBottomView" destination="qiM-jI-S8F" id="zF1-dX-lBs"/>
                         <outlet property="detailsView" destination="yBw-mk-urV" id="TLC-6o-v1h"/>
+                        <outlet property="topCurrentTempLabel" destination="c0c-Q6-P4b" id="7pR-zG-kMa"/>
+                        <outlet property="topFeelsLikeLabel" destination="PnG-zC-NFO" id="F0G-in-CF5"/>
+                        <outlet property="topHumidityLabel" destination="8yh-kR-jjm" id="vcX-Oh-7in"/>
+                        <outlet property="topMaxTempLabel" destination="y6r-aK-TOV" id="Tot-wC-4nA"/>
+                        <outlet property="topMinTempLabel" destination="tnf-Wj-78C" id="Ih2-c4-uKG"/>
+                        <outlet property="topPressureLabel" destination="OhA-em-gyF" id="Zya-n5-SML"/>
+                        <outlet property="topSkyLabel" destination="JxN-Hs-dfa" id="3Ob-Q0-C5m"/>
+                        <outlet property="topSkyPicture" destination="015-od-3Lq" id="fTT-4f-Hvo"/>
+                        <outlet property="topWindLabel" destination="yYi-pj-oQ0" id="jEm-C6-sMO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Zrz-ce-BJh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		862B3E7527386E54005663CB /* WeatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862B3E7427386E53005663CB /* WeatherService.swift */; };
+		86A30F222738B7B200A811D4 /* DecodedWeatherForecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A30F212738B7B200A811D4 /* DecodedWeatherForecast.swift */; };
 		86E7EEFA273588BB00596736 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E7EEF9273588BB00596736 /* AppDelegate.swift */; };
 		86E7EEFC273588BB00596736 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E7EEFB273588BB00596736 /* SceneDelegate.swift */; };
 		86E7EEFE273588BB00596736 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E7EEFD273588BB00596736 /* ViewController.swift */; };
@@ -39,6 +41,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		862B3E7427386E53005663CB /* WeatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherService.swift; sourceTree = "<group>"; };
+		86A30F212738B7B200A811D4 /* DecodedWeatherForecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodedWeatherForecast.swift; sourceTree = "<group>"; };
 		86E7EEF6273588BB00596736 /* Baluchon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Baluchon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		86E7EEF9273588BB00596736 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		86E7EEFB273588BB00596736 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -82,6 +86,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		862B3E7327386E3D005663CB /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				862B3E7427386E53005663CB /* WeatherService.swift */,
+				86A30F212738B7B200A811D4 /* DecodedWeatherForecast.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		86E7EEED273588BB00596736 = {
 			isa = PBXGroup;
 			children = (
@@ -105,6 +118,7 @@
 		86E7EEF8273588BB00596736 /* Baluchon */ = {
 			isa = PBXGroup;
 			children = (
+				862B3E7327386E3D005663CB /* Model */,
 				86E7EF2B2735895100596736 /* Storyboards */,
 				86E7EF2A2735893500596736 /* ViewControllers */,
 				86E7EF292735891400596736 /* Delegates */,
@@ -178,6 +192,7 @@
 				86E7EEF2273588BB00596736 /* Sources */,
 				86E7EEF3273588BB00596736 /* Frameworks */,
 				86E7EEF4273588BB00596736 /* Resources */,
+				862B3E7627386FAA005663CB /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -294,6 +309,26 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		862B3E7627386FAA005663CB /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		86E7EEF2273588BB00596736 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -305,6 +340,8 @@
 				86E7EEFA273588BB00596736 /* AppDelegate.swift in Sources */,
 				86E7EF3227359C4600596736 /* CurrencyExchangeViewController.swift in Sources */,
 				86E7EEFC273588BB00596736 /* SceneDelegate.swift in Sources */,
+				862B3E7527386E54005663CB /* WeatherService.swift in Sources */,
+				86A30F222738B7B200A811D4 /* DecodedWeatherForecast.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
