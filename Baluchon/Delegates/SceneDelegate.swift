@@ -3,7 +3,7 @@
 //  Baluchon
 //
 //  Created by JEAN SEBASTIEN BRUNET on 5/11/21.
-// swiftlint:disable line_length
+// swiftlint:disable line_length unused_optional_binding
 //
 
 import UIKit
