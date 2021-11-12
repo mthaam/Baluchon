@@ -509,14 +509,14 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="Zit-ou-zgC" userLabel="Upper Stack View">
                                         <rect key="frame" x="0.0" y="0.0" width="396" height="381.66666666666669"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="Hiy-1U-Il3" userLabel="Languages Stack View">
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="41" translatesAutoresizingMaskIntoConstraints="NO" id="Hiy-1U-Il3" userLabel="Languages Stack View">
                                                 <rect key="frame" x="0.0" y="0.0" width="396" height="30"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="M3I-rI-I62">
-                                                        <rect key="frame" x="0.0" y="0.0" width="153" height="30"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="177.66666666666666" height="30"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="French" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="H65-l5-2t0">
-                                                                <rect key="frame" x="0.0" y="0.0" width="153" height="30"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="177.66666666666666" height="30"/>
                                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="13"/>
                                                                 <color key="textColor" red="0.18494868280000001" green="0.42355066540000003" blue="0.86616551880000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                 <nil key="highlightedColor"/>
@@ -530,21 +530,11 @@
                                                             <constraint firstItem="H65-l5-2t0" firstAttribute="top" secondItem="M3I-rI-I62" secondAttribute="top" id="uHX-7s-s0A"/>
                                                         </constraints>
                                                     </view>
-                                                    <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ge0-uS-NCq">
-                                                        <rect key="frame" x="153" y="0.0" width="55.333333333333343" height="30"/>
-                                                        <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" image="leftRightArrow2" imagePlacement="leading">
-                                                            <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage"/>
-                                                        </buttonConfiguration>
-                                                        <connections>
-                                                            <action selector="switchLanguages:" destination="9fz-jN-82e" eventType="touchUpInside" id="byW-FA-8uI"/>
-                                                        </connections>
-                                                    </button>
                                                     <view contentMode="scaleToFill" horizontalHuggingPriority="251" horizontalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="tj7-BK-5t2">
-                                                        <rect key="frame" x="208.33333333333337" y="0.0" width="187.66666666666663" height="30"/>
+                                                        <rect key="frame" x="218.66666666666663" y="0.0" width="177.33333333333337" height="30"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="English" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="jg6-xX-HC4">
-                                                                <rect key="frame" x="0.0" y="0.0" width="187.66666666666666" height="30"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="177.33333333333334" height="30"/>
                                                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="13"/>
                                                                 <color key="textColor" red="0.18494868280000001" green="0.42355066540000003" blue="0.86616551880000003" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                 <nil key="highlightedColor"/>
@@ -670,14 +660,30 @@
                                     </view>
                                 </subviews>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ge0-uS-NCq">
+                                <rect key="frame" x="199" y="60" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="6He-pW-QkT"/>
+                                    <constraint firstAttribute="width" secondItem="ge0-uS-NCq" secondAttribute="height" multiplier="1:1" id="eVu-ec-wIb"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="leftRightArrow2" imagePlacement="leading">
+                                    <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="switchLanguages:" destination="9fz-jN-82e" eventType="touchUpInside" id="byW-FA-8uI"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="m1U-KK-CUF"/>
                         <color key="backgroundColor" red="0.0" green="0.0087172249329999993" blue="0.69360315800000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="m1U-KK-CUF" firstAttribute="bottom" secondItem="rom-bd-pl1" secondAttribute="bottom" constant="16" id="59o-wf-J12"/>
                             <constraint firstItem="rom-bd-pl1" firstAttribute="top" secondItem="m1U-KK-CUF" secondAttribute="top" constant="16" id="ALU-1g-IIT"/>
+                            <constraint firstItem="ge0-uS-NCq" firstAttribute="centerY" secondItem="Hiy-1U-Il3" secondAttribute="centerY" id="BYw-WH-UHw"/>
                             <constraint firstItem="rom-bd-pl1" firstAttribute="leading" secondItem="m1U-KK-CUF" secondAttribute="leading" constant="16" id="L3A-zw-zJm"/>
                             <constraint firstItem="m1U-KK-CUF" firstAttribute="trailing" secondItem="rom-bd-pl1" secondAttribute="trailing" constant="16" id="cmK-kn-dOD"/>
+                            <constraint firstItem="ge0-uS-NCq" firstAttribute="centerX" secondItem="Hiy-1U-Il3" secondAttribute="centerX" id="rYN-VW-deJ"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Translate" image="translate" id="zmV-sq-cYH"/>
