@@ -4,6 +4,7 @@
 //
 //  Created by JEAN SEBASTIEN BRUNET on 5/11/21.
 //
+// swiftlint:disable line_length
 
 import UIKit
 
@@ -21,28 +22,58 @@ class TranslateViewController: UIViewController {
     @IBOutlet weak var leftLanguageView: UIView!
     @IBOutlet weak var rightLanguageView: UIView!
     @IBOutlet weak var autoDetectView: UIView!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         makeRoundCornersToViews()
     }
 
     @IBAction func translate(_ sender: Any) {
-        
+        performLanguageTranslatation(from: leftLanguageLabel.text, toLang: englishLanguageLabel.text, autoDetect: autoDetectSwitch.isOn)
     }
 
     @IBAction func switchLanguages(_ sender: Any) {
         reverseTranslationDirection()
     }
 
-    
     @IBAction func enableLanguageDetection(_ sender: UISwitch) {
+        guard toTranslateTextView.hasText && toTranslateTextView.text.components(separatedBy: " ").count > 3 else {
+            sender.setOn(false, animated: true)
+            sendAlert(withMessage: "Type in at least 4 words to enable Auto Detection")
+            return
+        }
         autoDetectView(sender: sender)
     }
-    
+
 }
 
 extension TranslateViewController {
+
+    private func performLanguageTranslatation(from: String?, toLang: String?, autoDetect: Bool) {
+        guard let inputLanguage = from, let outputLanguage = toLang else { return }
+        guard let text = toTranslateTextView.text else { return }
+        var outputLanguageCode = String()
+
+        switch outputLanguage {
+        case "English":
+            outputLanguageCode = "en"
+        case "French" :
+            outputLanguageCode = "fr"
+        default:
+            break
+        }
+
+        TranslateService.shared.translate(from: inputLanguage, toLang: outputLanguageCode, autoDetect: autoDetect, text: text) { success, translatedContent in
+            if success {
+                guard let translatedContent = translatedContent else {
+                    return
+                }
+                self.translatedTextView.text = translatedContent.text
+            } else {
+                self.sendAlert(withMessage: "Unable to translate")
+            }
+        }
+    }
 
     private func sendAlert(withMessage: String) {
         presentAlert(withMessage: withMessage)

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		47842721273F46BB009E1B66 /* DecodedTranslation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47842720273F46BB009E1B66 /* DecodedTranslation.swift */; };
+		861579FE273EC8900099D996 /* TranslateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861579FD273EC8900099D996 /* TranslateService.swift */; };
 		862B3E7527386E54005663CB /* WeatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862B3E7427386E53005663CB /* WeatherService.swift */; };
 		86A30F222738B7B200A811D4 /* DecodedWeatherForecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A30F212738B7B200A811D4 /* DecodedWeatherForecast.swift */; };
 		86E7EEFA273588BB00596736 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E7EEF9273588BB00596736 /* AppDelegate.swift */; };
@@ -41,6 +43,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		47842720273F46BB009E1B66 /* DecodedTranslation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodedTranslation.swift; sourceTree = "<group>"; };
+		861579FD273EC8900099D996 /* TranslateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateService.swift; sourceTree = "<group>"; };
 		862B3E7427386E53005663CB /* WeatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherService.swift; sourceTree = "<group>"; };
 		86A30F212738B7B200A811D4 /* DecodedWeatherForecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecodedWeatherForecast.swift; sourceTree = "<group>"; };
 		86E7EEF6273588BB00596736 /* Baluchon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Baluchon.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -91,6 +95,8 @@
 			children = (
 				862B3E7427386E53005663CB /* WeatherService.swift */,
 				86A30F212738B7B200A811D4 /* DecodedWeatherForecast.swift */,
+				47842720273F46BB009E1B66 /* DecodedTranslation.swift */,
+				861579FD273EC8900099D996 /* TranslateService.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -336,7 +342,9 @@
 			files = (
 				86E7EEFE273588BB00596736 /* ViewController.swift in Sources */,
 				86E7EF3027359C0400596736 /* TranslateViewController.swift in Sources */,
+				47842721273F46BB009E1B66 /* DecodedTranslation.swift in Sources */,
 				86E7EF2E27359BF400596736 /* WeatherViewController.swift in Sources */,
+				861579FE273EC8900099D996 /* TranslateService.swift in Sources */,
 				86E7EEFA273588BB00596736 /* AppDelegate.swift in Sources */,
 				86E7EF3227359C4600596736 /* CurrencyExchangeViewController.swift in Sources */,
 				86E7EEFC273588BB00596736 /* SceneDelegate.swift in Sources */,
