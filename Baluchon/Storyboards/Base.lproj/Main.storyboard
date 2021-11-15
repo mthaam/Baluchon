@@ -574,6 +574,9 @@
                                                                         <color key="textColor" systemColor="labelColor"/>
                                                                         <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="18"/>
                                                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences" spellCheckingType="yes" keyboardAppearance="light"/>
+                                                                        <connections>
+                                                                            <outlet property="delegate" destination="9fz-jN-82e" id="BnP-eo-7cO"/>
+                                                                        </connections>
                                                                     </textView>
                                                                 </subviews>
                                                             </stackView>

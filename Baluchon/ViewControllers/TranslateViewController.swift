@@ -26,6 +26,7 @@ class TranslateViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         makeRoundCornersToViews()
+        toTranslateTextView.delegate = self
     }
 
     @IBAction func translate(_ sender: Any) {
@@ -43,6 +44,12 @@ class TranslateViewController: UIViewController {
             return
         }
         autoDetectView(sender: sender)
+        if sender.isOn {
+            performDetection()
+        } else {
+            leftLanguageLabel.text = "French"
+            englishLanguageLabel.text = "English"
+        }
     }
 
 }
@@ -63,14 +70,29 @@ extension TranslateViewController {
             break
         }
 
-        TranslateService.shared.translate(from: inputLanguage, toLang: outputLanguageCode, autoDetect: autoDetect, text: text) { success, translatedContent in
+        TranslateService.shared.translate(from: inputLanguage, toLang: outputLanguageCode, autoDetect: autoDetect, text: text) { success, translatedContent, detectedLanguage in
             if success {
                 guard let translatedContent = translatedContent else {
                     return
                 }
+                if detectedLanguage != nil {
+                    self.leftLanguageLabel.text = detectedLanguage
+                }
                 self.translatedTextView.text = translatedContent.text
             } else {
                 self.sendAlert(withMessage: "Unable to translate")
+            }
+        }
+    }
+
+    private func performDetection() {
+        guard let text = toTranslateTextView.text else { return }
+        TranslateService.shared.detectInputLanguage(text: text, target: englishLanguageLabel.text) { success, detectedLanguage in
+            if success {
+                guard let detection = detectedLanguage else { return }
+                self.leftLanguageLabel.text = detection
+            } else {
+                self.sendAlert(withMessage: "Could not succeed to detect language")
             }
         }
     }
@@ -116,5 +138,15 @@ extension TranslateViewController {
         rightLanguageView.layer.cornerRadius = 10
         autoDetectView.layer.cornerRadius = 10
         autoDetectSwitch.layer.cornerRadius = 12
+    }
+}
+
+extension TranslateViewController: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+                    toTranslateTextView.resignFirstResponder()
+                    return false
+                }
+        return true
     }
 }

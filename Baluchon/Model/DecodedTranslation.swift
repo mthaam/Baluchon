@@ -22,3 +22,35 @@ struct TranslatedData {
     var text: String
     var target: String
 }
+
+struct DetectionJsonToDecode: Decodable {
+    var data: DetectionJsonContent
+}
+
+struct DetectionJsonContent: Decodable {
+    var detections: [[DetectionContent]]
+}
+
+struct DetectionContent: Decodable {
+    var language: String?
+}
+
+struct DetectionLanguage {
+    let language: String
+}
+
+struct AvailableLanguages: Decodable {
+    var data: Languages
+}
+
+struct Languages: Decodable {
+    var languages: [LanguageEntries]
+}
+
+struct LanguageEntries: Decodable {
+    var language, name: String
+}
+
+struct LanguageDictionnary {
+    var languageDictionnary: [String: String]
+}
