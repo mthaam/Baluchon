@@ -7,4 +7,4 @@
 
 import Foundation
 
-let currencies = ["EUR", "US$", "CA$", "GPB", "YEN"]
+let currencies = ["US$", "EUR", "CA$", "GPB", "YEN"]

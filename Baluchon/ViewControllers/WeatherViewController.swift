@@ -44,12 +44,12 @@ class WeatherViewController: UIViewController {
         super.viewDidLoad()
         makeRoundCornersToViews()
         makeLabelsVoidAtAppStartUp()
-//        setupLocation()
+        setupLocation()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        setupLocation()
+        setupLocation()
     }
 
 }

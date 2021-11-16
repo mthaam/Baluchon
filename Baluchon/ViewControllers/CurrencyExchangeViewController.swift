@@ -9,6 +9,8 @@ import UIKit
 
 class CurrencyExchangeViewController: UIViewController {
 
+    let currencyTreatment = CurrencyTreatment()
+
     @IBOutlet weak var pickerView: UIPickerView!
     @IBOutlet weak var containingViewPicker: UIView!
     @IBOutlet weak var inputTextView: UITextView!
@@ -17,6 +19,12 @@ class CurrencyExchangeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         makeRoundCornersToViews()
+        getRates()
+
+        NotificationCenter.default.addObserver(self, selector: #selector(displayResult(notification:)),
+                                               name: Notification.Name("updateDisplay"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(displayAlert(notification:)),
+                                               name: Notification.Name("alertDisplay"), object: nil)
     }
 
     @IBAction func convert(_ sender: Any) {
@@ -26,19 +34,57 @@ class CurrencyExchangeViewController: UIViewController {
 
 extension CurrencyExchangeViewController {
 
-    private func performConverting() {
+    @objc func displayResult(notification: Notification) {
+        guard let userInfo = notification.userInfo else { return }
+        outputTextView.text = userInfo["updateDisplay"] as? String
     }
+
+    /// This function displays alerts if a notification is received.
+    @objc func displayAlert(notification: Notification) {
+        guard let userInfo = notification.userInfo else { return }
+        guard let errorMessage = userInfo["message"] as? String else { return }
+        presentAlert(withMessage: errorMessage)
+    }
+
 }
 
 extension CurrencyExchangeViewController {
+
+    private func performConverting() {
+        let inputPickerIndex = pickerView.selectedRow(inComponent: 0), outputPickerIndex = pickerView.selectedRow(inComponent: 1)
+        currencyTreatment.performConvert(from: inputPickerIndex, toCurrency: outputPickerIndex, with: inputTextView.text)
+    }
+
+    private func getRates() {
+        CurrencyService.shared.getRates { success, rates in
+            if success {
+                self.currencyTreatment.updateListedCurrencies(with: rates)
+            } else {
+                self.presentAlert(withMessage: "Unable to retrieve latests rates.")
+            }
+        }
+    }
+
+    private func presentAlert(withMessage: String) {
+        let alertViewController = UIAlertController(title: "Warning", message: withMessage, preferredStyle: .alert)
+        alertViewController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        present(alertViewController, animated: true, completion: nil)
+    }
+
+}
+
+extension CurrencyExchangeViewController {
+
     private func makeRoundCornersToViews() {
         inputTextView.layer.cornerRadius = 10
         outputTextView.layer.cornerRadius = 10
         containingViewPicker.layer.cornerRadius = 10
     }
+
 }
 
 extension CurrencyExchangeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 2
     }
@@ -53,7 +99,6 @@ extension CurrencyExchangeViewController: UIPickerViewDelegate, UIPickerViewData
         } else {
             return currencies[row]
         }
-        return nil
     }
 
 }
@@ -66,4 +111,5 @@ extension CurrencyExchangeViewController: UITextViewDelegate {
                 }
         return true
     }
+
 }

@@ -716,23 +716,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t8Y-uY-QeE">
-                                <rect key="frame" x="129" y="260" width="117" height="98"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="98" id="J6j-AO-G9t"/>
-                                    <constraint firstAttribute="width" secondItem="t8Y-uY-QeE" secondAttribute="height" multiplier="116:97" id="dC0-Mr-0Us"/>
-                                </constraints>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" image="exchangev2"/>
-                                <buttonConfiguration key="configuration" style="plain" image="exchangev2" cornerStyle="large">
-                                    <backgroundConfiguration key="background" strokeWidth="0.0" strokeOutset="1">
-                                        <color key="backgroundColor" systemColor="systemTealColor"/>
-                                    </backgroundConfiguration>
-                                </buttonConfiguration>
-                                <connections>
-                                    <action selector="convert:" destination="abl-00-fQ5" eventType="touchUpInside" id="LU7-N0-voH"/>
-                                </connections>
-                            </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="112" translatesAutoresizingMaskIntoConstraints="NO" id="10b-KI-xAq" userLabel="Main Stack View">
                                 <rect key="frame" x="16" y="16" width="343" height="586"/>
                                 <subviews>
@@ -759,7 +742,7 @@
                                                     <constraint firstAttribute="bottom" secondItem="f66-TK-9JE" secondAttribute="bottom" id="pir-De-x2t"/>
                                                 </constraints>
                                             </view>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="0" textAlignment="right" translatesAutoresizingMaskIntoConstraints="NO" id="bwH-TD-VYS">
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="right" translatesAutoresizingMaskIntoConstraints="NO" id="bwH-TD-VYS">
                                                 <rect key="frame" x="0.0" y="52" width="343" height="185"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <color key="textColor" systemColor="labelColor"/>
@@ -790,6 +773,23 @@
                                     <constraint firstAttribute="width" secondItem="sKM-ak-l80" secondAttribute="height" multiplier="1:1" id="nv0-BU-dFh"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t8Y-uY-QeE">
+                                <rect key="frame" x="129" y="260" width="117" height="98"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="98" id="J6j-AO-G9t"/>
+                                    <constraint firstAttribute="width" secondItem="t8Y-uY-QeE" secondAttribute="height" multiplier="116:97" id="dC0-Mr-0Us"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="exchangev2"/>
+                                <buttonConfiguration key="configuration" style="plain" image="exchangev2" cornerStyle="large">
+                                    <backgroundConfiguration key="background" strokeWidth="0.0" strokeOutset="1">
+                                        <color key="backgroundColor" systemColor="systemTealColor"/>
+                                    </backgroundConfiguration>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="convert:" destination="abl-00-fQ5" eventType="touchUpInside" id="LU7-N0-voH"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="wE7-Jk-an0"/>
                         <color key="backgroundColor" red="0.91146761178970337" green="0.39219909906387329" blue="0.38404625654220581" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
