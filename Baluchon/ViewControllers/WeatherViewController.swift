@@ -17,6 +17,7 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var currentConditionsView: UIView!
     @IBOutlet weak var currentConditionsBottomView: UIView!
     @IBOutlet weak var detailsBottomView: UIView!
+    @IBOutlet var activityIndictors: [UIActivityIndicatorView]!
 
     @IBOutlet weak var currentConditionsLabel: UILabel!
     @IBOutlet weak var topSkyLabel: UILabel!
@@ -44,12 +45,12 @@ class WeatherViewController: UIViewController {
         super.viewDidLoad()
         makeRoundCornersToViews()
         makeLabelsVoidAtAppStartUp()
-        setupLocation()
+        toggleActivityIndicator(shown: true)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        setupLocation()
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+//        setupLocation()
     }
 
 }
@@ -57,7 +58,9 @@ class WeatherViewController: UIViewController {
 extension WeatherViewController {
 
     private func updateForecast(with coordinates: String) {
+        toggleActivityIndicator(shown: true)
         WeatherService.shared.getWeather(with: coordinates) { success, newYorkWeatherForecast, geoLocatedWeather in
+            self.toggleActivityIndicator(shown: false)
             if success {
                 self.updateNewYorkWeatherLabels(with: newYorkWeatherForecast)
                 self.updateGeolocWeatherLabels(with: geoLocatedWeather)
@@ -68,7 +71,7 @@ extension WeatherViewController {
     }
 
     private func presentAlert() {
-        let alert = UIAlertController(title: "Error", message: "Could not retrieve weather forecast", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Error", message: "Could not retrieve weather forecast.", preferredStyle: .alert)
         let action = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
@@ -122,6 +125,14 @@ extension WeatherViewController {
             picture.image = UIImage(imageLiteralResourceName: "sunny-1")
         } else if weatherId >= 801 && weatherId <= 804 {
             picture.image = UIImage(imageLiteralResourceName: "fewCLouds")
+        }
+    }
+
+    private func toggleActivityIndicator(shown: Bool) {
+        topSkyPicture.isHidden = shown
+        bottomSkyPicture.isHidden = shown
+        activityIndictors.forEach { indicator in
+            indicator.isHidden = !shown
         }
     }
 

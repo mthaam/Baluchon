@@ -4,10 +4,14 @@
 //
 //  Created by JEAN SEBASTIEN BRUNET on 5/11/21.
 //
+// swiftlint:disable line_length
 
 import UIKit
 
 class CurrencyExchangeViewController: UIViewController {
+
+    var inputPickerIndex: Int { pickerView.selectedRow(inComponent: 0) }
+    var outputPickerIndex: Int { pickerView.selectedRow(inComponent: 1) }
 
     let currencyTreatment = CurrencyTreatment()
 
@@ -15,21 +19,45 @@ class CurrencyExchangeViewController: UIViewController {
     @IBOutlet weak var containingViewPicker: UIView!
     @IBOutlet weak var inputTextView: UITextView!
     @IBOutlet weak var outputTextView: UITextView!
+    @IBOutlet weak var baseAndUpdateStackView: UIStackView!
+    @IBOutlet weak var baseRateLabel: UILabel!
+    @IBOutlet weak var lastUpdateLabel: UILabel!
+    @IBOutlet weak var bottomStackView: UIStackView!
+    @IBOutlet weak var textViewContainer: UIView!
+    @IBOutlet weak var upperSymboLabel: UILabel!
+    @IBOutlet weak var bottomSymbolLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         makeRoundCornersToViews()
-        getRates()
+        inputTextView.delegate = self
+        inputTextView.becomeFirstResponder()
 
         NotificationCenter.default.addObserver(self, selector: #selector(displayResult(notification:)),
                                                name: Notification.Name("updateDisplay"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(displayAlert(notification:)),
                                                name: Notification.Name("alertDisplay"), object: nil)
+        getCurrencySymbol(from: inputPickerIndex, for: upperSymboLabel)
+        getCurrencySymbol(from: outputPickerIndex, for: bottomSymbolLabel)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+//        updateCurrencies()
+        inputTextView.becomeFirstResponder()
     }
 
     @IBAction func convert(_ sender: Any) {
         performConverting()
     }
+
+    @IBAction func clear(_ sender: Any) {
+        clearLabels()
+    }
+    @IBAction func dismissKeyboard(_ sender: Any) {
+        inputTextView.resignFirstResponder()
+    }
+
 }
 
 extension CurrencyExchangeViewController {
@@ -50,19 +78,47 @@ extension CurrencyExchangeViewController {
 
 extension CurrencyExchangeViewController {
 
+    private func updateCurrencies() {
+        let now = Date()
+        guard let lastTimeString = lastUpdateLabel.text else { return }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yy-MM-dd"
+        dateFormatter.timeZone = .current
+        let lastUpdateTime = dateFormatter.date(from: lastTimeString)
+        guard let lastTime = lastUpdateTime else { return }
+        let timeIntervalSinceUpdate = Int(now.timeIntervalSince(lastTime))
+        if timeIntervalSinceUpdate >= 86400 {
+            getRates()
+        }
+    }
+
     private func performConverting() {
-        let inputPickerIndex = pickerView.selectedRow(inComponent: 0), outputPickerIndex = pickerView.selectedRow(inComponent: 1)
         currencyTreatment.performConvert(from: inputPickerIndex, toCurrency: outputPickerIndex, with: inputTextView.text)
+        currencyTreatment.getBaseRate(from: inputPickerIndex, toCurrency: outputPickerIndex) { baseRate in
+            baseRateLabel.text = "1 \(currencies[inputPickerIndex]) = \(baseRate) \(currencies[outputPickerIndex])"
+        }
+        inputTextView.resignFirstResponder()
     }
 
     private func getRates() {
         CurrencyService.shared.getRates { success, rates in
             if success {
                 self.currencyTreatment.updateListedCurrencies(with: rates)
+                if let date = rates?.date {
+                    self.lastUpdateLabel.text = date
+                }
+                self.currencyTreatment.getBaseRate(from: self.inputPickerIndex, toCurrency: self.outputPickerIndex) { baseRate in
+                    self.baseRateLabel.text = "1 \(currencies[self.inputPickerIndex]) = \(baseRate) \(currencies[self.outputPickerIndex])"
+                }
             } else {
                 self.presentAlert(withMessage: "Unable to retrieve latests rates.")
             }
         }
+    }
+
+    private func clearLabels() {
+        inputTextView.text = ""
+        currencyTreatment.clear()
     }
 
     private func presentAlert(withMessage: String) {
@@ -71,14 +127,30 @@ extension CurrencyExchangeViewController {
         present(alertViewController, animated: true, completion: nil)
     }
 
+    private func getCurrencySymbol(from row: Int, for label: UILabel!) {
+        for (key, value) in currenciesIndexes where value == row {
+            if let currencySymbol = currenciesSymbols["\(key)"] {
+                if let currencyFlag = currenciesFlags["\(key)"] {
+                    label.text = "\(currencySymbol)\n\(currencyFlag)"
+                }
+            }
+        }
+    }
+
 }
 
 extension CurrencyExchangeViewController {
 
     private func makeRoundCornersToViews() {
-        inputTextView.layer.cornerRadius = 10
+        upperSymboLabel.layer.masksToBounds = true
+        upperSymboLabel.layer.cornerRadius = 10
+        bottomSymbolLabel.layer.masksToBounds = true
+        bottomSymbolLabel.layer.cornerRadius = 10
+        textViewContainer.layer.cornerRadius = 10
         outputTextView.layer.cornerRadius = 10
         containingViewPicker.layer.cornerRadius = 10
+        baseAndUpdateStackView.layer.cornerRadius = 10
+        bottomStackView.layer.cornerRadius = 10
     }
 
 }
@@ -101,6 +173,16 @@ extension CurrencyExchangeViewController: UIPickerViewDelegate, UIPickerViewData
         }
     }
 
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if component == 0 {
+            getCurrencySymbol(from: row, for: upperSymboLabel)
+        } else {
+            getCurrencySymbol(from: row, for: bottomSymbolLabel)
+        }
+        if inputTextView.text.count >= 1 {
+            performConverting()
+        }
+    }
 }
 
 extension CurrencyExchangeViewController: UITextViewDelegate {

@@ -22,11 +22,20 @@ class TranslateViewController: UIViewController {
     @IBOutlet weak var leftLanguageView: UIView!
     @IBOutlet weak var rightLanguageView: UIView!
     @IBOutlet weak var autoDetectView: UIView!
+    @IBOutlet weak var switchLanguagesButton: UIButton!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         makeRoundCornersToViews()
+        toggleActivityIndicator(shown: false)
         toTranslateTextView.delegate = self
+        toTranslateTextView.becomeFirstResponder()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        toTranslateTextView.becomeFirstResponder()
     }
 
     @IBAction func translate(_ sender: Any) {
@@ -52,6 +61,10 @@ class TranslateViewController: UIViewController {
         }
     }
 
+    @IBAction func dismissKeyboard(_ sender: Any) {
+        toTranslateTextView.resignFirstResponder()
+    }
+
 }
 
 extension TranslateViewController {
@@ -60,7 +73,7 @@ extension TranslateViewController {
         guard let inputLanguage = from, let outputLanguage = toLang else { return }
         guard let text = toTranslateTextView.text else { return }
         var outputLanguageCode = String()
-
+        toggleActivityIndicator(shown: true)
         switch outputLanguage {
         case "English":
             outputLanguageCode = "en"
@@ -72,6 +85,7 @@ extension TranslateViewController {
 
         TranslateService.shared.translate(from: inputLanguage, toLang: outputLanguageCode, autoDetect: autoDetect, text: text) { success, translatedContent, detectedLanguage in
             if success {
+                self.toggleActivityIndicator(shown: false)
                 guard let translatedContent = translatedContent else {
                     return
                 }
@@ -80,19 +94,23 @@ extension TranslateViewController {
                 }
                 self.translatedTextView.text = translatedContent.text
             } else {
-                self.sendAlert(withMessage: "Unable to translate")
+                self.toggleActivityIndicator(shown: false)
+                self.sendAlert(withMessage: "Unable to translate.")
             }
         }
     }
 
     private func performDetection() {
         guard let text = toTranslateTextView.text else { return }
+        toggleActivityIndicator(shown: true)
         TranslateService.shared.detectInputLanguage(text: text, target: englishLanguageLabel.text) { success, detectedLanguage in
             if success {
+                self.toggleActivityIndicator(shown: false)
                 guard let detection = detectedLanguage else { return }
                 self.leftLanguageLabel.text = detection
             } else {
-                self.sendAlert(withMessage: "Could not succeed to detect language")
+                self.toggleActivityIndicator(shown: false)
+                self.sendAlert(withMessage: "Could not succeed to detect language.")
             }
         }
     }
@@ -123,7 +141,7 @@ extension TranslateViewController {
     private func reverseTranslationDirection() {
         guard autoDetectSwitch.isOn == false else {
             sendAlert(withMessage: "Turn off auto detection before switching languages.")
-             return }
+            return }
         var languages: [String?] {
             [leftLanguageLabel.text, englishLanguageLabel.text] }
         guard let leftLanguage = languages[0], let rightLanguage = languages[1] else { return }
@@ -139,14 +157,21 @@ extension TranslateViewController {
         autoDetectView.layer.cornerRadius = 10
         autoDetectSwitch.layer.cornerRadius = 12
     }
+
+    private func toggleActivityIndicator(shown: Bool) {
+        switchLanguagesButton.isHidden = shown
+        activityIndicator.isHidden = !shown
+    }
 }
 
 extension TranslateViewController: UITextViewDelegate {
+
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
-                    toTranslateTextView.resignFirstResponder()
-                    return false
-                }
+            toTranslateTextView.resignFirstResponder()
+            performLanguageTranslatation(from: leftLanguageLabel.text, toLang: englishLanguageLabel.text, autoDetect: autoDetectSwitch.isOn)
+            return false
+        }
         return true
     }
 }

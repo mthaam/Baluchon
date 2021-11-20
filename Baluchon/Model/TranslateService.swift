@@ -29,20 +29,12 @@ class TranslateService {
 extension TranslateService {
 
     func translate(from: String, toLang: String, autoDetect: Bool, text: String, callback: @escaping (Bool, TranslatedData?, String?) -> Void) {
-        TranslateService.urlComponents.scheme = "https"
-        TranslateService.urlComponents.host = "translation.googleapis.com"
-        TranslateService.urlComponents.path = "/language/translate/v2"
-        TranslateService.urlComponents.queryItems = [
-            URLQueryItem(name: "key", value: TranslateService.key),
-            URLQueryItem(name: "q", value: text),
-            URLQueryItem(name: "target", value: toLang)
-        ]
+        setTranslateUrl(with: text, to: toLang)
 
         guard let url = TranslateService.urlComponents.url else {
             callback(false, nil, nil)
             return
         }
-
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
 
@@ -77,13 +69,8 @@ extension TranslateService {
     }
 
     func detectInputLanguage(text: String, target: String?, callback: @escaping (Bool, String?) -> Void) {
-        TranslateService.urlComponents.scheme = "https"
-        TranslateService.urlComponents.host = "translation.googleapis.com"
-        TranslateService.urlComponents.path = "/language/translate/v2/detect"
-        TranslateService.urlComponents.queryItems = [
-            URLQueryItem(name: "key", value: TranslateService.key),
-            URLQueryItem(name: "q", value: text)
-        ]
+
+        setDetectionUrl(with: text)
 
         guard let url = TranslateService.urlComponents.url else {
             callback(false, nil)
@@ -97,25 +84,8 @@ extension TranslateService {
 
         task = translateSession.dataTask(with: request) { data, response, error in
             DispatchQueue.main.async {
-                guard let data = data, error == nil else {
-                    callback(false, nil)
-                    return
-                }
-                guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                    callback(false, nil)
-                    return
-                }
-                guard let responseJSON = try? JSONDecoder().decode(DetectionJsonToDecode.self, from: data) else {
-                    callback(false, nil)
-                    return
-                }
-                let detectedInput = self.parseJsonDetectionData(decodedJSON: responseJSON)
-                self.checkAvailableLanguagesFor(source: detectedInput?.language, target: target) { detectedLanguage in
-                    guard detectedLanguage != nil else {
-                        callback(false, nil)
-                        return
-                    }
-                    callback(true, detectedLanguage)
+                self.manageDetectionSession(data: data, response: response, error: error, target: target) { success, detectedLanguage in
+                    callback(success, detectedLanguage)
                 }
             }
         }
@@ -136,13 +106,7 @@ extension TranslateService {
             break
         }
 
-        TranslateService.urlComponents.scheme = "https"
-        TranslateService.urlComponents.host = "translation.googleapis.com"
-        TranslateService.urlComponents.path = "/language/translate/v2/languages"
-        TranslateService.urlComponents.queryItems = [
-            URLQueryItem(name: "key", value: TranslateService.key),
-            URLQueryItem(name: "target", value: outputLanguageCode)
-        ]
+        setAvailableLanguagesUrl(for: outputLanguageCode)
 
         guard let url = TranslateService.urlComponents.url else {
             callback(nil)
@@ -156,31 +120,89 @@ extension TranslateService {
 
         task = translateSession.dataTask(with: request) { data, response, error in
             DispatchQueue.main.async {
-                guard let data = data, error == nil else {
-                    callback(nil)
-                    return
+                self.manageAvailableLanguagesSession(data: data, response: response, error: error, source: source) { confirmedLanguage in
+                    callback(confirmedLanguage)
                 }
-                guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                    callback(nil)
-                    return
-                }
-
-                guard let responseJSON = try? JSONDecoder().decode(AvailableLanguages.self, from: data) else {
-                    callback(nil)
-                    return
-                }
-
-                let availableLanguages = self.parseLanguagesData(decodedJSON: responseJSON)
-                guard let inputLangCode = source else { return }
-                guard let language = availableLanguages?.languageDictionnary[inputLangCode] else {
-                    callback(nil)
-                    return
-                }
-                let confirmedLanguage: String? = language
-                callback(confirmedLanguage)
             }
         }
         task?.resume()
+    }
+
+    private func manageDetectionSession(data: Data?, response: URLResponse?, error: Error?, target: String?, callback: @escaping (Bool, String?) -> Void) {
+        guard let data = data, error == nil else {
+            callback(false, nil)
+            return
+        }
+        guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+            callback(false, nil)
+            return
+        }
+        guard let responseJSON = try? JSONDecoder().decode(DetectionJsonToDecode.self, from: data) else {
+            callback(false, nil)
+            return
+        }
+        let detectedInput = self.parseJsonDetectionData(decodedJSON: responseJSON)
+        self.checkAvailableLanguagesFor(source: detectedInput?.language, target: target) { detectedLanguage in
+            guard detectedLanguage != nil else {
+                callback(false, nil)
+                return
+            }
+            callback(true, detectedLanguage)
+        }
+    }
+
+    private func manageAvailableLanguagesSession(data: Data?, response: URLResponse?, error: Error?, source: String?, callback: (String?) -> Void) {
+        guard let data = data, error == nil else {
+            callback(nil)
+            return
+        }
+        guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+            callback(nil)
+            return
+        }
+        guard let responseJSON = try? JSONDecoder().decode(AvailableLanguages.self, from: data) else {
+            callback(nil)
+            return
+        }
+        let availableLanguages = self.parseLanguagesData(decodedJSON: responseJSON)
+        guard let inputLangCode = source else { return }
+        guard let language = availableLanguages?.languageDictionnary[inputLangCode] else {
+            callback(nil)
+            return
+        }
+        let confirmedLanguage: String? = language
+        callback(confirmedLanguage)
+    }
+
+    private func setTranslateUrl(with text: String, to toLang: String) {
+        TranslateService.urlComponents.scheme = "https"
+        TranslateService.urlComponents.host = "translation.googleapis.com"
+        TranslateService.urlComponents.path = "/language/translate/v2"
+        TranslateService.urlComponents.queryItems = [
+            URLQueryItem(name: "key", value: TranslateService.key),
+            URLQueryItem(name: "q", value: text),
+            URLQueryItem(name: "target", value: toLang)
+        ]
+    }
+
+    private func setDetectionUrl(with text: String) {
+        TranslateService.urlComponents.scheme = "https"
+        TranslateService.urlComponents.host = "translation.googleapis.com"
+        TranslateService.urlComponents.path = "/language/translate/v2/detect"
+        TranslateService.urlComponents.queryItems = [
+            URLQueryItem(name: "key", value: TranslateService.key),
+            URLQueryItem(name: "q", value: text)
+        ]
+    }
+
+    private func setAvailableLanguagesUrl(for outputLanguageCode: String) {
+        TranslateService.urlComponents.scheme = "https"
+        TranslateService.urlComponents.host = "translation.googleapis.com"
+        TranslateService.urlComponents.path = "/language/translate/v2/languages"
+        TranslateService.urlComponents.queryItems = [
+            URLQueryItem(name: "key", value: TranslateService.key),
+            URLQueryItem(name: "target", value: outputLanguageCode)
+        ]
     }
 
 }

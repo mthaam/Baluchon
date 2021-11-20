@@ -7,9 +7,10 @@
 
 import Foundation
 
-class CurrencyTreatment {
+final class CurrencyTreatment {
 
     private var listedCurrencies: [String: Double] = [:]
+    private var indexes = currenciesIndexes
 
     var outputString: String = "0" {
         didSet {
@@ -19,10 +20,6 @@ class CurrencyTreatment {
     }
 
     func updateListedCurrencies(with rates: Rates?) {
-//        guard let allRatesInfo = rates, let rates = allRatesInfo.rates else {
-//            print("could not update rates")
-//            return
-//        }
         guard let allRatesInfo = rates else { return }
         guard let rates = allRatesInfo.rates else { return }
         listedCurrencies["USD"] = rates.USD
@@ -32,24 +29,30 @@ class CurrencyTreatment {
         listedCurrencies["JPY"] = rates.JPY
     }
 
+    func getBaseRate(from inputIndex: Int, toCurrency outputIndex: Int, callback: (String) -> Void) {
+        let inputCurrencyRate = getInputOutputRates(withIndex: inputIndex)
+        let outputCurencyRate = getInputOutputRates(withIndex: outputIndex)
+        let euroConverted = convertToEuros(with: 1.0, from: inputCurrencyRate)
+        let finalOutputConverted = convertToFinalOutput(with: euroConverted, toOutput: outputCurencyRate)
+        let convertedOutput = doubleToString(from: finalOutputConverted)
+        callback(convertedOutput)
+    }
+
     func performConvert(from inputIndex: Int, toCurrency outputIndex: Int, with number: String) {
         let inputCurrencyRate = getInputOutputRates(withIndex: inputIndex)
         let outputCurencyRate = getInputOutputRates(withIndex: outputIndex)
         guard let doubleToConvert = Double(number) else {
-            sendAlertNotification(message: "Unable to convert input")
+            sendAlertNotification(message: "Unable to convert input.")
             return }
         let euroConverted = convertToEuros(with: doubleToConvert, from: inputCurrencyRate)
         let finalOutputConverted = convertToFinalOutput(with: euroConverted, toOutput: outputCurencyRate)
         let convertedOutput = doubleToString(from: finalOutputConverted)
-//        let baseRate = calculateBaseRate(from: inputCurrencyRate, to: outputCurencyRate)
-//        let entireString = "\(convertedOutput)"
         outputString = convertedOutput
     }
 
-//    func clear() {
-//        inputString = "0"
-//        firstConvert = true
-//    }
+    func clear() {
+        outputString = "0"
+    }
 
     private func calculateBaseRate(from inputRate: Double, to outputRate: Double) -> String {
         var rateString = ""
@@ -74,19 +77,10 @@ class CurrencyTreatment {
 
     private func getInputOutputRates(withIndex: Int) -> Double {
         var rate = 0.0
-        switch withIndex {
-        case 0 :
-            if let usd = listedCurrencies["USD"] { rate = usd }
-        case 1 :
-            if let eur = listedCurrencies["EUR"] { rate = eur }
-        case 2 :
-            if let cad = listedCurrencies["CAD"] { rate = cad }
-        case 3 :
-            if let gpb = listedCurrencies["GBP"] { rate = gpb }
-        case 4 :
-            if let jpy = listedCurrencies["JPY"] { rate = jpy }
-        default :
-            break
+        for (key, value) in indexes where value == withIndex {
+            if let currencyRate = listedCurrencies["\(key)"] {
+                rate = currencyRate
+            }
         }
         return rate
     }
