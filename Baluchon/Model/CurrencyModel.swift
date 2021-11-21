@@ -9,7 +9,7 @@ import Foundation
 
 final class CurrencyTreatment {
 
-    private var listedCurrencies: [String: Double] = [:]
+    var listedCurrencies: [String: Double] = [:]
     private var indexes = currenciesIndexes
 
     var outputString: String = "0" {
@@ -52,15 +52,6 @@ final class CurrencyTreatment {
 
     func clear() {
         outputString = "0"
-    }
-
-    private func calculateBaseRate(from inputRate: Double, to outputRate: Double) -> String {
-        var rateString = ""
-        let base = convertToEuros(with: 1.0, from: inputRate)
-        let finalRate = convertToFinalOutput(with: base, toOutput: outputRate)
-        let finalRateAsString = doubleToString(from: finalRate)
-        rateString = finalRateAsString
-        return rateString
     }
 
     private func convertToEuros(with input: Double, from rate: Double) -> Double {
