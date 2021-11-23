@@ -20,9 +20,11 @@ class WeatherService {
 
     private var task: URLSessionDataTask?
     private var weatherSession = URLSession(configuration: .default)
+    private var weatherGeoSession = URLSession(configuration: .default)
 
-    init(weatherSession: URLSession) {
+    init(weatherSession: URLSession, weatherGeoSession: URLSession) {
         self.weatherSession = weatherSession
+        self.weatherGeoSession = weatherGeoSession
     }
 
 }
@@ -64,7 +66,7 @@ extension WeatherService {
         task?.cancel()
         guard let geolocURL = getUrlWithGeolocCoordinates(with: coordinates) else { return }
 
-        task = weatherSession.dataTask(with: geolocURL) { data, response, error in
+        task = weatherGeoSession.dataTask(with: geolocURL) { data, response, error in
             DispatchQueue.main.async {
                 guard let data = data, error == nil else {
                     completionHandler(nil)
@@ -74,6 +76,7 @@ extension WeatherService {
                     completionHandler(nil)
                     return
                 }
+                print(response.statusCode)
                 guard let responseJSON = try? JSONDecoder().decode(DecodedWeatherForecast.self, from: data) else {
                     completionHandler(nil)
                     return

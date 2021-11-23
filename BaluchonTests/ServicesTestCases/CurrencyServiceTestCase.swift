@@ -14,6 +14,7 @@ class CurrencyServiceTestCase: XCTestCase {
 
     override func tearDown() {
         TestUrlProtocol.loadingHandler = nil
+        TestUrlProtocolWithError.loadingHandler = nil
     }
 
     func testGivenApiIsCalled_WhenFetchingData_CallbackShouldHaveTrueAndCorrectData() {
@@ -43,7 +44,7 @@ class CurrencyServiceTestCase: XCTestCase {
         wait(for: [expectation], timeout: 1)
     }
 
-    func testGivenApiIsCalled_WhenFetchingDataAndGettingNoData_ThenCallbackShouldPostFalseAndNil() {
+    func testGivenApiIsCalled_WhenFetchingDataAndGettingIncorrectData_ThenCallbackShouldPostFalseAndNil() {
 
         TestUrlProtocol.loadingHandler = { _ in
             let response: HTTPURLResponse = FakeResponseData.responseOK
@@ -63,7 +64,7 @@ class CurrencyServiceTestCase: XCTestCase {
         wait(for: [expectation], timeout: 1)
     }
 
-    func testGivenApiIsCalled_WhenFetchingDataAndGettingResponse_ThenCallbackShouldPostFalseAndNilData() {
+    func testGivenApiIsCalled_WhenFetchingDataAndGettingBadResponse_ThenCallbackShouldPostFalseAndNilData() {
 
         TestUrlProtocol.loadingHandler = { _ in
             let response: HTTPURLResponse = FakeResponseData.responseKO
@@ -83,7 +84,7 @@ class CurrencyServiceTestCase: XCTestCase {
         wait(for: [expectation], timeout: 1)
     }
 
-    func testGivenApiIsCalled_WhenFetchingAndGettingAnError_CallbackShouldPostFalseAndNil2() {
+    func testGivenApiIsCalled_WhenFetchingAndGettingAnError_CallbackShouldPostFalseAndNil() {
 
         TestUrlProtocolWithError.loadingHandler = { _ in
             let response: HTTPURLResponse = FakeResponseData.responseOK

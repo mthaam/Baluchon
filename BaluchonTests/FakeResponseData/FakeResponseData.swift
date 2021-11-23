@@ -55,5 +55,5 @@ class FakeResponseData {
     // MARK: - Error
 
     class ApiError: Error {}
-    static let error: ApiError = ApiError()
+    static let error: ApiError? = ApiError()
 }
