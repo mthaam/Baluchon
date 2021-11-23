@@ -7,13 +7,22 @@
 
 import Foundation
 
-struct Rates: Decodable {
+struct Rates: Decodable, Encodable, Equatable {
+
+    static func == (lhs: Rates, rhs: Rates) -> Bool {
+        return (
+        lhs.base == rhs.base &&
+        lhs.date == rhs.base &&
+        lhs.rates == rhs.rates
+        )
+    }
+
     var base: String?
     var date: String?
     var rates: AllRates?
 }
 
-struct AllRates: Decodable {
+struct AllRates: Decodable, Encodable, Equatable {
     var USD: Double
     var EUR: Int
     var CAD: Double

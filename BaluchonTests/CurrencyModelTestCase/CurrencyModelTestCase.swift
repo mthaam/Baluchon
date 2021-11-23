@@ -4,6 +4,7 @@
 //
 //  Created by JEAN SEBASTIEN BRUNET on 20/11/21.
 //
+// swiftlint:disable line_length
 
 import XCTest
 @testable import Baluchon

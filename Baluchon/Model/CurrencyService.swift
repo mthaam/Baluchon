@@ -28,12 +28,8 @@ class CurrencyService {
 extension CurrencyService {
 
     func getRates(callback: @escaping (Bool, Rates?) -> Void) {
-        setURL()
 
-        guard let url = CurrencyService.urlComponents.url else {
-            callback(false, nil)
-            return
-        }
+        let url = setURL()
 
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -59,7 +55,7 @@ extension CurrencyService {
         task?.resume()
     }
 
-    private func setURL() {
+    private func setURL() -> URL {
         CurrencyService.urlComponents.scheme = "http"
         CurrencyService.urlComponents.host = "data.fixer.io"
         CurrencyService.urlComponents.path = "/api/latest"
@@ -68,6 +64,8 @@ extension CurrencyService {
             URLQueryItem(name: "symbols", value: "USD,EUR,CAD,GBP,JPY"),
             URLQueryItem(name: "base", value: "EUR")
         ]
+        let url = CurrencyService.urlComponents.url
+        return url!
     }
 
 }
