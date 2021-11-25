@@ -50,13 +50,18 @@ class WeatherViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-//        setupLocation()
+        setupLocation()
     }
 
 }
 
+// MARK: - API CALLS MANAGEMENT
+
 extension WeatherViewController {
 
+    /// This function manages the response from callback
+    ///  - Parameter coordinates : A string value,
+    ///  which are the GPS coordinates of user.
     private func updateForecast(with coordinates: String) {
         toggleActivityIndicator(shown: true)
         WeatherService.shared.getWeather(with: coordinates) { success, newYorkWeatherForecast, geoLocatedWeather in
@@ -70,6 +75,7 @@ extension WeatherViewController {
         }
     }
 
+    /// This function presents an alert to user.
     private func presentAlert() {
         let alert = UIAlertController(title: "Error", message: "Could not retrieve weather forecast.", preferredStyle: .alert)
         let action = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
@@ -79,8 +85,11 @@ extension WeatherViewController {
 
 }
 
+// MARK: - DISPLAY MANAGEMENT FUNCTIONS
+
 extension WeatherViewController {
 
+    /// This function updates labels after receiving the data.
     private func updateNewYorkWeatherLabels(with forecast: WeatherForecast?) {
         guard let weather = forecast else { return }
         currentConditionsLabel.text = "Current conditions for New-York, \(weather.country)"
@@ -95,6 +104,7 @@ extension WeatherViewController {
         topWindLabel.text = "\(weather.speed) km/h"
     }
 
+    /// This function updates labels after receiving the data.
     private func updateGeolocWeatherLabels(with forecast: WeatherForecast?) {
         guard let weather = forecast else { return }
         cityLabel.text = "Current conditions for \(weather.cityName.capitalized), \(weather.country)"
@@ -109,6 +119,7 @@ extension WeatherViewController {
         bottomWindLabel.text = "\(weather.speed) km/h"
     }
 
+    /// This function updates pictures after receiving the data.
     private func updateWeatherPicture(with weather: WeatherForecast, for picture: UIImageView!) {
         guard let weatherId = Int(weather.weatherId) else { return }
         if weatherId >= 200 && weatherId <= 232 {
@@ -128,6 +139,7 @@ extension WeatherViewController {
         }
     }
 
+    /// This function toggles activity indicators during calls.
     private func toggleActivityIndicator(shown: Bool) {
         topSkyPicture.isHidden = shown
         bottomSkyPicture.isHidden = shown
@@ -136,6 +148,7 @@ extension WeatherViewController {
         }
     }
 
+    /// This function makes round corners to some views.
     private func makeRoundCornersToViews() {
         detailsView.layer.cornerRadius = 10
         currentConditionsView.layer.cornerRadius = 10
@@ -143,6 +156,8 @@ extension WeatherViewController {
         currentConditionsBottomView.layer.cornerRadius = 10
     }
 
+    /// This function updates labels with temporary
+    /// neutral strings while the data is not yet received.
     private func makeLabelsVoidAtAppStartUp() {
         cityLabel.text = "Downloading forecast for your location..."
         bottomSkyLabel.text = "--"
@@ -166,18 +181,24 @@ extension WeatherViewController {
     }
 }
 
+// MARK: - CLLOCATION MANAGER DELEGATE
+
 extension WeatherViewController: CLLocationManagerDelegate {
 
+    /// This function updates location
     func setupLocation() {
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
     }
 
+    /// This function is called in case there is an error while
+    /// retrieving location.
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error.localizedDescription)
     }
 
+    /// This function gives the coordinates to later call API.
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         locationManager.stopUpdatingLocation()
         guard let loc = locations.first else { return }

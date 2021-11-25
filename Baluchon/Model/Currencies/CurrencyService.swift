@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// This class is used to make calls to Fixer.io API
 class CurrencyService {
 
     static var shared = CurrencyService()
@@ -25,8 +26,12 @@ class CurrencyService {
 
 }
 
+// MARK: - API CALL
+
 extension CurrencyService {
 
+    /// This function calls the Fixer.io API.
+    /// - Parameter callback: a closure which posts a boolean value, and a Rates optionnal object.
     func getRates(callback: @escaping (Bool, Rates?) -> Void) {
 
         let url = setURL()
@@ -55,6 +60,9 @@ extension CurrencyService {
         task?.resume()
     }
 
+    /// This function returns an URL.
+    /// It is used to set the url of subsequent request,
+    ///  for given currencies, Euro based.
     private func setURL() -> URL {
         CurrencyService.urlComponents.scheme = "http"
         CurrencyService.urlComponents.host = "data.fixer.io"

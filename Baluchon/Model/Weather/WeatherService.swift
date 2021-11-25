@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// This class is used to make calls to OpenWeatherMap API
 class WeatherService {
     static var shared = WeatherService()
     private init() {}
@@ -29,8 +30,14 @@ class WeatherService {
 
 }
 
+// MARK: - API CALLS
+
 extension WeatherService {
 
+    /// This functions calls the OpenWeatherMap API.
+    /// - Parameter coordinates : A string value sent by WeatherViewController, reprensenting users's current GPS coordinates
+    /// - Parameter callback : a closure posting a boolean, and 2 WeatherForecast objects (1 per location)
+    /// - Note that a geo located call is made within dataTask closure's body.
     func getWeather(with coordinates: String, callback: @escaping (Bool, WeatherForecast?, WeatherForecast?) -> Void) {
         task?.cancel()
         guard let url = URL(string: WeatherService.completeNewYorkURL ) else { return }
@@ -62,6 +69,9 @@ extension WeatherService {
         task?.resume()
     }
 
+    /// This functions calls the OpenWeatherMap API, based on user's current GPS coordinates.
+    /// - Parameter coordinates : A string value sent by WeatherViewController, reprensenting users's current GPS coordinates
+    /// - Parameter callback : a closure posting a WeatherForecast object.
     func getgeoLocatedWeather(with coordinates: String, completionHandler: @escaping (WeatherForecast?) -> Void) {
         task?.cancel()
         guard let geolocURL = getUrlWithGeolocCoordinates(with: coordinates) else { return }
@@ -76,7 +86,6 @@ extension WeatherService {
                     completionHandler(nil)
                     return
                 }
-                print(response.statusCode)
                 guard let responseJSON = try? JSONDecoder().decode(DecodedWeatherForecast.self, from: data) else {
                     completionHandler(nil)
                     return
@@ -90,8 +99,12 @@ extension WeatherService {
 
 }
 
+// MARK: - SUPPORTING PRIVATE FUNCTIONS
+
 extension WeatherService {
 
+    /// This functions returns an URL
+    /// - Parameter coordinates : a string value reprensenting user's current GPS coordinates.
     private func getUrlWithGeolocCoordinates(with coordinates: String) -> URL? {
         var urlString = WeatherService.baseOpenWeatherURL
         urlString += coordinates
@@ -101,6 +114,8 @@ extension WeatherService {
 
     }
 
+    /// This function returns a WeatherForecast object.
+    /// - Parameter decodedJSON: An oject created using JSONDecoder().decode
     private func parseJsonData(decodedJSON: DecodedWeatherForecast) -> WeatherForecast {
         let weatherId = String(decodedJSON.weather[0].id)
         let description = decodedJSON.weather[0].description

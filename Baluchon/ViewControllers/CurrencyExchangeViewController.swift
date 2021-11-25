@@ -43,7 +43,7 @@ class CurrencyExchangeViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-//        updateCurrencies()
+        updateCurrencies()
         inputTextView.becomeFirstResponder()
     }
 
@@ -60,8 +60,11 @@ class CurrencyExchangeViewController: UIViewController {
 
 }
 
+// MARK: - @OBJc FUNCTIONS
+
 extension CurrencyExchangeViewController {
 
+    /// This function updates result label whenever a notification is received
     @objc func displayResult(notification: Notification) {
         guard let userInfo = notification.userInfo else { return }
         outputTextView.text = userInfo["updateDisplay"] as? String
@@ -76,8 +79,12 @@ extension CurrencyExchangeViewController {
 
 }
 
+// MARK: - CALCULATIONS AND API CALLS
+
 extension CurrencyExchangeViewController {
 
+    /// This function calls the getRates() function
+    /// if rates were not updated for more than 24hrs.
     private func updateCurrencies() {
         let now = Date()
         guard let lastTimeString = lastUpdateLabel.text else { return }
@@ -92,6 +99,8 @@ extension CurrencyExchangeViewController {
         }
     }
 
+    /// This function calls performConvert() and
+    /// getBaseRate() from currencyModel.
     private func performConverting() {
         currencyTreatment.performConvert(from: inputPickerIndex, toCurrency: outputPickerIndex, with: inputTextView.text)
         currencyTreatment.getBaseRate(from: inputPickerIndex, toCurrency: outputPickerIndex) { baseRate in
@@ -100,6 +109,8 @@ extension CurrencyExchangeViewController {
         inputTextView.resignFirstResponder()
     }
 
+    /// This funciton calls the getRates() function from
+    /// CurrencyService class, to fetch rates.
     private func getRates() {
         CurrencyService.shared.getRates { success, rates in
             if success {
@@ -116,17 +127,22 @@ extension CurrencyExchangeViewController {
         }
     }
 
+    /// THis function clears labels.
     private func clearLabels() {
         inputTextView.text = ""
         currencyTreatment.clear()
     }
 
+    /// This function displays an alert if needed.
+    /// - Parameter withMessage : a string value,
+    /// which is the message to display.
     private func presentAlert(withMessage: String) {
         let alertViewController = UIAlertController(title: "Warning", message: withMessage, preferredStyle: .alert)
         alertViewController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         present(alertViewController, animated: true, completion: nil)
     }
 
+    /// THis function updates currency symbols.
     private func getCurrencySymbol(from row: Int, for label: UILabel!) {
         for (key, value) in currenciesIndexes where value == row {
             if let currencySymbol = currenciesSymbols["\(key)"] {
@@ -139,8 +155,11 @@ extension CurrencyExchangeViewController {
 
 }
 
+// MARK: - DISPLAY MANAGEMENT FUNCTIONS
+
 extension CurrencyExchangeViewController {
 
+    /// This function makes round corners to views.
     private func makeRoundCornersToViews() {
         upperSymboLabel.layer.masksToBounds = true
         upperSymboLabel.layer.cornerRadius = 10
@@ -154,6 +173,8 @@ extension CurrencyExchangeViewController {
     }
 
 }
+
+// MARK: - PICKER VIEW DELEGATES
 
 extension CurrencyExchangeViewController: UIPickerViewDelegate, UIPickerViewDataSource {
 
@@ -184,6 +205,8 @@ extension CurrencyExchangeViewController: UIPickerViewDelegate, UIPickerViewData
         }
     }
 }
+
+// MARK: - UITEXTVIEW DELEGATE
 
 extension CurrencyExchangeViewController: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

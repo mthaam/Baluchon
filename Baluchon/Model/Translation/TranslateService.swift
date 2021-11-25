@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// This class is used to make calls to Google's cloud translate API
 class TranslateService {
 
     static var shared = TranslateService()
@@ -19,15 +20,27 @@ class TranslateService {
 
     private var task: URLSessionDataTask?
     private var translateSession = URLSession(configuration: .default)
+    private var availableLanguagesSession = URLSession(configuration: .default)
+    private var detectionSession = URLSession(configuration: .default)
 
-    init(translateSession: URLSession) {
+    init(translateSession: URLSession, detectionSession: URLSession, availableLanguagesSession: URLSession) {
         self.translateSession = translateSession
+        self.availableLanguagesSession = availableLanguagesSession
+        self.detectionSession = detectionSession
     }
 
 }
 
+// MARK: - API CALLS
+
 extension TranslateService {
 
+    /// This function is the main function used to translate text.
+    /// - Parameter from : a string value which is the input language name, e.g. "English"
+    /// - Parameter toLang : a string value which is the target language code, e.g. "en"
+    /// - Parameter autoDetect : a boolean which states if auto detecting input language is needed.
+    /// - Parameter text : a string value, which is the actual text to translate.
+    /// - Parameter callback : a closure that posts a boolean, and optional TranslatatedData and String objects.
     func translate(from: String, toLang: String, autoDetect: Bool, text: String, callback: @escaping (Bool, TranslatedData?, String?) -> Void) {
         setTranslateUrl(with: text, to: toLang)
 
@@ -68,6 +81,11 @@ extension TranslateService {
         task?.resume()
     }
 
+    /// This function calls the API to detect input language.
+    /// - Note that another call is chained within dataTask().
+    /// - Parameter text : a string value, which is the actual text to translate.
+    /// - Parameter target : a string value which is the target language code, e.g. "English".
+    /// - Parameter callback : a closure that posts a boolean, and optional String object.
     func detectInputLanguage(text: String, target: String?, callback: @escaping (Bool, String?) -> Void) {
 
         setDetectionUrl(with: text)
@@ -82,7 +100,7 @@ extension TranslateService {
 
         task?.cancel()
 
-        task = translateSession.dataTask(with: request) { data, response, error in
+        task = detectionSession.dataTask(with: request) { data, response, error in
             DispatchQueue.main.async {
                 self.manageDetectionSession(data: data, response: response, error: error, target: target) { success, detectedLanguage in
                     callback(success, detectedLanguage)
@@ -92,6 +110,10 @@ extension TranslateService {
         task?.resume()
     }
 
+    /// This function calls the API to check support languages for translations's target language.
+    /// - Parameter source : a string value, which is the actual text to translate.
+    /// - Parameter target : a string value which is the target language code, e.g. "English".
+    /// - Parameter callback : a closure that posts an optional String object, which is the confirmed language name detected.
     func checkAvailableLanguagesFor(source: String?, target: String?, callback: @escaping (String?) -> Void) {
         var outputLanguageCode = ""
         guard let target = target else {
@@ -118,7 +140,7 @@ extension TranslateService {
 
         task?.cancel()
 
-        task = translateSession.dataTask(with: request) { data, response, error in
+        task = availableLanguagesSession.dataTask(with: request) { data, response, error in
             DispatchQueue.main.async {
                 self.manageAvailableLanguagesSession(data: data, response: response, error: error, source: source) { confirmedLanguage in
                     callback(confirmedLanguage)
@@ -128,6 +150,14 @@ extension TranslateService {
         task?.resume()
     }
 
+}
+
+// MARK: - API CALLS SUPPORTING FUNCTIONS
+
+extension TranslateService {
+
+    /// This function comes in support to the detection API call.
+    /// It refactors dataTask's closure body to make a smaller main function.
     private func manageDetectionSession(data: Data?, response: URLResponse?, error: Error?, target: String?, callback: @escaping (Bool, String?) -> Void) {
         guard let data = data, error == nil else {
             callback(false, nil)
@@ -151,6 +181,8 @@ extension TranslateService {
         }
     }
 
+    /// This function comes in support to the supported languages API call.
+    /// It refactors dataTask's closure body to make a smaller main function.
     private func manageAvailableLanguagesSession(data: Data?, response: URLResponse?, error: Error?, source: String?, callback: (String?) -> Void) {
         guard let data = data, error == nil else {
             callback(nil)
@@ -174,6 +206,11 @@ extension TranslateService {
         callback(confirmedLanguage)
     }
 
+// MARK: - URL Setters
+
+    /// This functions is used to set the URL of subsequent API request.
+    /// - Parameter text : the string value received, which is the actual text to translate.
+    /// - Parameter toLang : the string value which is a language code, e.g. "fr"
     private func setTranslateUrl(with text: String, to toLang: String) {
         TranslateService.urlComponents.scheme = "https"
         TranslateService.urlComponents.host = "translation.googleapis.com"
@@ -185,6 +222,8 @@ extension TranslateService {
         ]
     }
 
+    /// This functions is used to set the URL of subsequent API request.
+    /// - Parameter text : the string value received, which is the actual text to translate.
     private func setDetectionUrl(with text: String) {
         TranslateService.urlComponents.scheme = "https"
         TranslateService.urlComponents.host = "translation.googleapis.com"
@@ -195,6 +234,8 @@ extension TranslateService {
         ]
     }
 
+    /// This functions is used to set the URL of subsequent API request.
+    /// - Parameter outputLanguageCode : the string value which is a language code, e.g. "fr"
     private func setAvailableLanguagesUrl(for outputLanguageCode: String) {
         TranslateService.urlComponents.scheme = "https"
         TranslateService.urlComponents.host = "translation.googleapis.com"
@@ -207,8 +248,14 @@ extension TranslateService {
 
 }
 
+// MARK: - JSON PARSING FUNCTIONS
+
 extension TranslateService {
 
+    /// This function parses a decoded AvailableLanguages.
+    /// It returns an optionnal LanguageDictionnary object.
+    /// - Parameter decodedJson : An AvailableLanguages object, which contains all the datas
+    ///  decoded from the JSON data received.
     private func parseLanguagesData(decodedJSON: AvailableLanguages) -> LanguageDictionnary? {
         var dictionnary: [String: String] = [String: String]()
         for languageEntry in decodedJSON.data.languages {
@@ -218,6 +265,10 @@ extension TranslateService {
         return languageDictionnary
     }
 
+    /// This function parses a decoded DetectionJsonToDecode.
+    /// It returns an optionnal DetectionLanguage object.
+    /// - Parameter decodedJson : An AvailableLanguages object, which contains all the datas
+    ///  decoded from the JSON data received.
     private func parseJsonDetectionData(decodedJSON: DetectionJsonToDecode ) -> DetectionLanguage? {
         guard let detectedLanguage = decodedJSON.data.detections[0][0].language else {
             let language = DetectionLanguage(language: "Could not detect")
@@ -226,6 +277,10 @@ extension TranslateService {
         return language
     }
 
+    /// This function parses a decoded TranslationJsonToDecode.
+    /// It returns a TranslatedData object.
+    /// - Parameter decodedJson : A TranslationJsonToDecode object, which contains all the datas
+    ///  decoded from the JSON data received.
     private func parseJsonTranslationData(decodedJSON: TranslationJsonToDecode ) -> TranslatedData {
         var text = String()
         var language = String()

@@ -67,8 +67,15 @@ class TranslateViewController: UIViewController {
 
 }
 
+// MARK: - API CALLS MANAGEMENT
+
 extension TranslateViewController {
 
+    /// This function calls translate method from TranslateService.
+    /// - Parameter from : A String? value which is the source language.
+    /// - Parameter toLang: A String? value which is the target translation language.
+    /// - Parameter autoDetect : a boolean value, which is the current
+    /// autoDetect UISwitch.isOn value.
     private func performLanguageTranslatation(from: String?, toLang: String?, autoDetect: Bool) {
         guard let inputLanguage = from, let outputLanguage = toLang else { return }
         guard let text = toTranslateTextView.text else { return }
@@ -100,6 +107,7 @@ extension TranslateViewController {
         }
     }
 
+    /// This function calls the  detection method from TranslateService.
     private func performDetection() {
         guard let text = toTranslateTextView.text else { return }
         toggleActivityIndicator(shown: true)
@@ -115,10 +123,16 @@ extension TranslateViewController {
         }
     }
 
+    /// This function calls the presentAlert() function
+    /// - Parameter withMessage : A string value, which
+    /// is the message displayed in case of an Alert.
     private func sendAlert(withMessage: String) {
         presentAlert(withMessage: withMessage)
     }
 
+    /// This function displays an alert to user.
+    /// - Parameter withMessage : A string value, which
+    /// is the message displayed in case of an Alert.
     private func presentAlert(withMessage: String) {
         let alertViewController = UIAlertController(title: "Warning", message: withMessage, preferredStyle: .alert)
         alertViewController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
@@ -127,8 +141,11 @@ extension TranslateViewController {
 
 }
 
+// MARK: - DISPLAY MANAGEMENT FUNCTIONS
+
 extension TranslateViewController {
 
+    /// This function updates Language labels
     private func autoDetectView(sender: UISwitch) {
         switch sender.isOn {
         case true :
@@ -138,6 +155,8 @@ extension TranslateViewController {
         }
     }
 
+    /// This function updates Languages names in case
+    /// user reverses translation direction.
     private func reverseTranslationDirection() {
         guard autoDetectSwitch.isOn == false else {
             sendAlert(withMessage: "Turn off auto detection before switching languages.")
@@ -149,6 +168,7 @@ extension TranslateViewController {
         leftLanguageLabel.text = rightLanguage
     }
 
+    /// This function makes round corners to views.
     private func makeRoundCornersToViews() {
         bottomView.layer.cornerRadius = 10
         inputTextView.layer.cornerRadius = 10
@@ -158,14 +178,19 @@ extension TranslateViewController {
         autoDetectSwitch.layer.cornerRadius = 12
     }
 
+    /// This function toggles activity indicator.
     private func toggleActivityIndicator(shown: Bool) {
         switchLanguagesButton.isHidden = shown
         activityIndicator.isHidden = !shown
     }
 }
 
+// MARK: - UITEXTVIEW DELEGATE
+
 extension TranslateViewController: UITextViewDelegate {
 
+    /// This function is used to manage keyboard disapperance,
+    /// and calls Language translation if user presses "GO"
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
             toTranslateTextView.resignFirstResponder()

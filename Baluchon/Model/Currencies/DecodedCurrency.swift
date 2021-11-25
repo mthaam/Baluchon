@@ -7,6 +7,9 @@
 
 import Foundation
 
+/// This strurcture matches the objects received from call in JSON data for currency rates.
+/// It conforms to Decodable and Encodable protocols.
+/// - Note that Equatable protocol is used for unit testing purposes.
 struct Rates: Decodable, Encodable, Equatable {
 
     static func == (lhs: Rates, rhs: Rates) -> Bool {
@@ -22,6 +25,9 @@ struct Rates: Decodable, Encodable, Equatable {
     var rates: AllRates?
 }
 
+/// This strurcture matches the objects received from call in JSON data for translation
+/// It conforms to Decodable and Encodable protocols.
+/// - Note that Equatable protocol is used for unit testing purposes.
 struct AllRates: Decodable, Encodable, Equatable {
     var USD: Double
     var EUR: Int

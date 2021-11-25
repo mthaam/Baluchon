@@ -8,6 +8,8 @@
 
 import Foundation
 
+/// This structure contains all the necessary
+/// data to update UI labels
 struct WeatherForecast {
     let weatherId: String
     let description: String
@@ -22,6 +24,8 @@ struct WeatherForecast {
     let country: String
 }
 
+/// This structure is the main object representing the JSON received
+/// It conforms to Decodable protocol
 struct DecodedWeatherForecast: Decodable {
     var weather: [Weather]
     var main: Temperatures
@@ -30,11 +34,15 @@ struct DecodedWeatherForecast: Decodable {
     var sys: Country
 }
 
+/// This structure is part of main decoded structure
+/// It conforms to Decodable protocol
 struct Weather: Decodable {
     var id: Int
     var description: String
 }
 
+/// This structure is part of main decoded structure
+/// It conforms to Decodable protocol
 struct Temperatures: Decodable {
 
     var temp: Double
@@ -45,10 +53,14 @@ struct Temperatures: Decodable {
     var humidity: Int
 }
 
+/// This structure is part of main decoded structure
+/// It conforms to Decodable protocol
 struct Country: Decodable {
     var country: String
 }
 
+/// This structure is part of main decoded structure
+/// It conforms to Decodable protocol
 struct Wind: Decodable {
     var speed: Double
 }
