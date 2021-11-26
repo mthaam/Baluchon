@@ -5,6 +5,8 @@
 //  Created by JEAN SEBASTIEN BRUNET on 5/11/21.
 //
 // swiftlint:disable line_length
+// swiftlint:disable force_cast
+// swiftlint:disable identifier_name
 
 import UIKit
 import CoreLocation
@@ -40,6 +42,15 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var bottomHumidityLabel: UILabel!
     @IBOutlet weak var bottomPressureLabel: UILabel!
     @IBOutlet weak var bottomWindLabel: UILabel!
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if Core.shared.isNewUser() {
+            let vc = storyboard?.instantiateViewController(withIdentifier: "welcome") as! WelcomeViewController
+            vc.modalPresentationStyle = .fullScreen
+            present(vc, animated: true, completion: nil)
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
